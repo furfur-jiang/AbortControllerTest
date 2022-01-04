@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="download">开始请求</button>
+    <button class="abort">终止请求</button>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <script>
+      const downloadBtn = document.querySelector('.download')
+      const abortBtn = document.querySelector('.abort')
+      downloadBtn.addEventListener('click', axiosFun)
+
+      const controller = new AbortController()
+      let signal = controller.signal // /ˈsɪɡnəl/
+      console.log('signal 的初始状态: ', signal)
+
+      abortBtn.addEventListener('click', function () {
+        controller.abort() // /əˈbɔːt/
+        console.log('signal 的中止状态: ', signal)
+      })
+
+      function axiosFun() {
+        axios
+          .get('http://localhost:4000/', {
+            signal: controller.signal,
+          })
+          .then(function (response) {
+            console.log(response)
+          })
+          .catch(function (e) {
+            console.log(e)
+          })
+      }
+    </script>
+  </body>
+</html>
